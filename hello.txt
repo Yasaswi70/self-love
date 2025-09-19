@@ -1,2 +1,3 @@
-inside your new repo,click"add filr"-"upload"
+yasaswi your new repo,click"add filr"-"upload"
 files"Drags or select a file named hello.txt
+
