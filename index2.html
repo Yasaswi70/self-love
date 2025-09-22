@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Delivery Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    header {
+      background-color: #ff5722;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #e64a19;
+    }
+
+    nav a {
+      color: white;
+      padding: 15px 20px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background-color: #d84315;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 30px;
+    }
+
+    .food-item {
+      display: flex;
+      justify-content: space-between;
+      background-color: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .food-item button {
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .food-item button:hover {
+      background-color: #e64a19;
+    }
+
+    .cart {
+      background-color: #fff3e0;
+      padding: 15px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+
+    .checkout {
+      margin-top: 30px;
+      background-color: #fce4ec;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    .checkout input, .checkout textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .checkout button {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .checkout button:hover {
+      background-color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍔 QuickBite - Food Delivery</h1>
+  </header>
+
+  <nav>
+    <a href="#pizza">Pizza</a>
+    <a href="#burgers">Burgers</a>
+    <a href="#drinks">Drinks</a>
+    <a href="#cart">Cart</a>
+  </nav>
+
+  <div class="container">
+    <section id="pizza">
+      <h2>🍕 Pizza</h2>
+      <div class="food-item">
+        <span>Margherita Pizza - </100span>
+        <button onclick="addToCart('Margherita Pizza', 100)">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <span>Pepperoni Pizza - 100</span>
+        <button onclick="addToCart('Pepperoni Pizza', 100)">Add to Cart</button>
+      </div>
+    </section>
+
+    <section id="burgers">
+      <h2>🍔 Burgers</h2>
+      <div class="food-item">
+        <span>Cheese Burger - 80</span>
+        <button onclick="addToCart('Cheese Burger', 80)">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <span>Chicken Burger - 70</span>
+        <button onclick="addToCart('Chicken Burger', 70)">Add to Cart</button>
+      </div>
+    </section>
+
+    <section id="drinks">
+      <h2>🥤 Drinks</h2>
+      <div class="food-item">
+        <span>Coke - 120</span>
+        <button onclick="addToCart('Coke', 120)">Add to Cart</button>
+      </div>
+      <div class="food-item">
+        <span>Lemonade - 160</span>
+        <button onclick="addToCart('Lemonade', 160)">Add to Cart</button>
+      </div>
+    </section>
+
+    <section id="cart" class="cart">
+      <h2>🛒 Your Cart</h2>
+      <ul id="cart-items"></ul>
+      <p><strong>Total:</strong> $<span id="total">0</span></p>
+    </section>
+
+    <section class="checkout">
+      <h2>📋 Checkout</h2>
+      <form onsubmit="submitOrder(event)">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="address" placeholder="Delivery Address" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <textarea id="notes" placeholder="Any special instructions?" rows="3"></textarea>
+        <button type="submit">Place Order</button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById('cart-items');
+      const totalSpan = document.getElementById('total');
+      cartList.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((c, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${c.item} - $${c.price}`;
+        cartList.appendChild(li);
+        total += c.price;
+      });
+
+      totalSpan.textContent = total;
+    }
+
+    function submitOrder(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+      const phone = document.getElementById('phone').value;
+      const notes = document.getElementById('notes').value;
+
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      const orderSummary = cart.map(c => `${c.item} - $${c.price}`).join('\n');
+
+      alert(
+        `Thank you for your order, ${name}!\n\n` +
+        `Order Details:\n${orderSummary}\n\n` +
+        `Total: $${document.getElementById('total').textContent}\n` +
+        `Delivery To: ${address}\nPhone: ${phone}\nNotes: ${notes || "None"}`
+      );
+
+      // Reset
+      cart = [];
+      updateCart();
+      document.querySelector("form").reset();
+    }
+  </script>
+
+</body>
+</html>
